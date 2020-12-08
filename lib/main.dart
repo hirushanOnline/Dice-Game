@@ -1,45 +1,63 @@
-import 'package:audioplayers/audio_cache.dart';
+import 'dart:math';
 import 'package:flutter/material.dart';
 
-void main() => runApp(XylophoneApp());
-
-class XylophoneApp extends StatelessWidget {
-  void playSound(int soundNumber) {
-    final player = AudioCache();
-    player.play('note$soundNumber.wav');
-  }
-
-  Expanded buildKey({Color color, int soundNumber}) {
-    return Expanded(
-      child: FlatButton(
-        color: color,
-        onPressed: () {
-          playSound(soundNumber);
-        },
-        child: null,
+void main() {
+  return runApp(
+    MaterialApp(
+      home: Scaffold(
+        backgroundColor: Colors.red,
+        appBar: AppBar(
+          title: Text('Random Dice Generator'),
+          backgroundColor: Colors.red,
+        ),
+        body: Dicepage(),
       ),
-    );
+    ),
+  );
+}
+
+class Dicepage extends StatefulWidget {
+  @override
+  _DicepageState createState() => _DicepageState();
+}
+
+class _DicepageState extends State<Dicepage> {
+  int leftDiceNumber = 4;
+  int rightDiceNumber = 2;
+
+  void changeDiceFace() {
+    setState(() {
+      leftDiceNumber = Random().nextInt(6) + 1;
+      rightDiceNumber = Random().nextInt(6) + 1;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    var column = Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        buildKey(color: Colors.purple, soundNumber: 1),
-        buildKey(color: Colors.indigo, soundNumber: 2),
-        buildKey(color: Colors.blue, soundNumber: 3),
-        buildKey(color: Colors.green, soundNumber: 4),
-        buildKey(color: Colors.yellow, soundNumber: 5),
-        buildKey(color: Colors.orange, soundNumber: 6),
-        buildKey(color: Colors.red, soundNumber: 7),
-      ],
-    );
-    return MaterialApp(
-      home: Scaffold(
-        body: SafeArea(
-          child: column,
-        ),
+    return Center(
+      child: Row(
+        children: [
+          Expanded(
+            child: FlatButton(
+              onPressed: () {
+                setState(() {
+                  changeDiceFace();
+                });
+              },
+              child: Image.asset('images/dice$leftDiceNumber.png'),
+            ),
+          ),
+          Expanded(
+            child: FlatButton(
+              onPressed: () {
+                setState(() {
+                  changeDiceFace();
+                });
+              },
+              child: Image.asset('images/dice$rightDiceNumber.png'),
+            ),
+          ),
+        ],
       ),
     );
   }
